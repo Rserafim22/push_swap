@@ -35,4 +35,6 @@ List    rotate(List stack, int code);
 void    rotate2(List *a, List *b);
 List reverse_rotate(List stack, int code);
 void    reverse_rotate2(List *a, List *b);
+
+Bool    opti_rotation(List stack, int lenght);
 #endif

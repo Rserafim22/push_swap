@@ -83,6 +83,110 @@ List swap(List stack, int code)
         ft_printf("SB\n"); 
     return (stack);
 }
+Bool    search_min(List stack)
+{
+    ListElement *temp;
+    ListElement *temp2;
+
+    temp = stack;
+    temp2 = stack;
+    while (temp2->next != NULL)
+    {
+        if (temp->value > temp2->value)
+            return false;
+        temp2 = temp2->next;
+    }
+    if (temp->value > temp2->value)
+            return false;
+    return true;
+}
+Bool    swap_worth(List stack)
+{
+    int value;
+
+    value = stack->value;
+    stack = stack->next;
+    if (value > stack->value)
+        return true;
+    else
+        return false;
+}
+int push_swap(List *a, List *b, int count, int lenght)
+{
+    lenght = list_lenght(*a);
+
+        while (!search_min(*a))
+        {
+            if (swap_worth(*a))
+            {
+                 *a = swap(*a, 'a');
+                 count++;
+            }
+            else 
+            {
+                if (opti_rotation(*a,lenght))
+                {
+                    while (!search_min(*a))
+                    {
+                        *a = rotate(*a, 'a');
+                        count++;
+                    }
+                }
+                else
+                {
+                    while (!search_min(*a))
+                    {
+                        *a = reverse_rotate(*a, 'a');
+                        count++;
+                    }
+                }
+            }   
+        
+            /*ft_printf("a = ");
+            print_list(*a);
+            ft_printf("b = ");
+            print_list(*b);*/
+        }
+    *b = push(*b,a, 'b');
+    count++;
+    /*ft_printf("a = ");
+    print_list(*a);
+    ft_printf("b = ");
+    print_list(*b);*/
+    if (!is_empty_list(*a))
+         count = push_swap(a,b, count, lenght);
+    /*if (!is_empty_list(b))
+    {
+        a = push(a, &b, 'a');
+        ft_printf("a = ");
+        print_list(a);
+        ft_printf("b = ");
+        print_list(b);
+    }*/
+    return (count);
+}
+Bool    opti_rotation(List stack, int lenght)
+{
+    int comp;
+    int count;
+
+    comp = stack->value;
+    count = 0;
+    while (stack->next != NULL)
+    {
+        if (count > lenght / 2)
+        {
+            if (stack->value < comp)
+                return false;
+        }
+        if (stack->value < comp)
+            comp = stack->value;
+        stack = stack->next;
+        count++;
+    }
+    return true;
+}
+
 
 int main(int ac, char **av)
 {
@@ -96,71 +200,30 @@ int main(int ac, char **av)
             return (ft_printf("Inserez une liste de nombres valide\n"));
     List a;
     List b;
+    int count;
+    int lenght;
 
+    count = 0;
+    lenght = 0;
     a = new_list();
     b = new_list();
-    b = insert_front_list(b, 8);
-    b = insert_front_list(b, 7);
-    b = insert_front_list(b, 6);
-    b = insert_front_list(b, 5);
     a = init_stack(ac, a, i, av);
-    ft_printf("a = ");
+    count = push_swap(&a, &b, count, lenght);
+    while (!is_empty_list(b))
+    {
+        a = push(a, &b, 'a');
+        count++;
+        /*ft_printf("a = ");
+        print_list(a);
+        ft_printf("b = ");
+        print_list(b);*/
+    }
+    ft_printf("liste apres le tri = ");
     print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    swap_stacks(&a, &b);
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    a = swap(a, 'a');
-    b = swap(b, 'b');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    a = push(a, &b, 'a');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    a = push(a, &b, 'a');
-    a = push(a, &b, 'a');
-    a = push(a, &b, 'a');
-    a = push(a, &b, 'a');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    b = push(b, &a, 'b');
-    b = push(b, &a, 'b');
-    b = push(b, &a, 'b');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    a = rotate(a, 'a');
-    b = rotate(b, 'b');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    rotate2(&a, &b);
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    a = reverse_rotate(a, 'a');
-    b = reverse_rotate(b, 'b');
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
-    reverse_rotate2(&a, &b);
-    ft_printf("a = ");
-    print_list(a);
-    ft_printf("b = ");
-    print_list(b);
+    ft_printf("nombre de mouvements = %d\n", count);
+
+
+    
 
 
 

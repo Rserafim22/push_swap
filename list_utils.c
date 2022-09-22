@@ -47,7 +47,10 @@ List insert_back_list(List li, int x)
     element = malloc(sizeof(*element));
 
     if (element == NULL)
-        exit (ft_printf("erreur allocation dynamique"));
+    {
+        free(element);
+        return (li);
+    }
     element->value = x;
     element->next = NULL;
     if (is_empty_list(li))

@@ -7,7 +7,10 @@ List insert_front_list(List li, int x)
     element = malloc(sizeof(*element));
 
     if (element == NULL)
-        exit (ft_printf("erreur allocation dynamique"));
+    {
+        free(element);
+        return (li);
+    }
     element->value = x;
     if (is_empty_list(li))
         element->next = NULL;
@@ -46,10 +49,6 @@ List remove_front_list(List li)
         return new_list();
     ListElement *element;
 
-    element = malloc(sizeof(*element));
-
-    if (element == NULL)
-        exit (ft_printf("erreur allocation dynamique"));
     element = li->next;
     free (li);
     li = NULL;
@@ -61,5 +60,12 @@ List clear_list(List li)
         return new_list();
     while (li != NULL)
         li = remove_front_list(li);
+    li = NULL;
     return (li);
+}
+int get_last_elem(List stack)
+{
+    while (stack->next != NULL)
+        stack = stack->next;
+    return (stack->value);
 }
